@@ -21,6 +21,12 @@ class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 			expected = True
 			self.assertEqual(expectation, expected)
 
+	def testOutputDoneProperty(self):
+		with self.test_session():
+			expectation = (('output' in stats) and 'done' in stats['output'])
+			expected = True
+			self.assertEqual(expectation, expected)
+
 class TimeStepsTestCase(tf.test.TestCase):
 	pass
 
