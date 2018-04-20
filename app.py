@@ -2,16 +2,6 @@ import gym
 import argparse
 import tensorflow as tf
 
-'''
-Dependencies for that program work well
-
-pip install gym gym[atari] tensorflow
-
-or you can made an python environment with anaconda
-
-conda create -n tf python=3.6 gym gym[atari] tensorflow
-'''
-
 parser = argparse.ArgumentParser()
 parser.add_argument('--environment_name', default='MsPacman-v0', type=str, help='The gym environment name')
 parser.add_argument('--i_episodes', default=10, type=int, help='episodes')
