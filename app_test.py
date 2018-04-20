@@ -3,9 +3,21 @@ from app import tf
 from app import stats
 
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
-	def testObservationsPropertie(self):
+	def testObservationsProperty(self):
 		with self.test_session():
 			expectation = 'observations' in stats
+			expected = True
+			self.assertEqual(expectation, expected)
+
+	def testRewardsProperty(self):
+		with self.test_session():
+			expectation = 'rewards' in stats
+			expected = True
+			self.assertEqual(expectation, expected)
+
+	def testInputActionsProperty(self):
+		with self.test_session():
+			expectation = (('input' in stats) and 'actions' in stats['input'])
 			expected = True
 			self.assertEqual(expectation, expected)
 
