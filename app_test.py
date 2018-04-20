@@ -1,7 +1,13 @@
-import tensorflow as tf
+from app import tf
+
+from app import stats
 
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
-	pass
+	def testObservationsPropertie(self):
+		with self.test_session():
+			expectation = 'observations' in stats
+			expected = True
+			self.assertEqual(expectation, expected)
 
 class TimeStepsTestCase(tf.test.TestCase):
 	pass
@@ -23,3 +29,6 @@ class CollectiblesTestCase(tf.test.TestCase):
 
 class ProgressTestCase(tf.test.TestCase):
 	pass
+
+if __name__ == '__main__':
+	tf.test.main()
