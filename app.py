@@ -42,7 +42,9 @@ def is_filled_latest_episode_with_iteration(i_episode_scoped, iteration_limit):
 def composed_sample(s=2, vm=None):
 	if vm:
 		gen_sample = lambda: vm.action_space.sample()
-		return [gen_sample() for _ in range(s)]
+		gen_list_based_sample = lambda subdued_limit: [gen_sample() for _ in
+		                                               range(subdued_limit)] 
+		return gen_list_based_sample(s)
 	return []
 
 def random_action_space_sample_choice(s=2, vm=None):

@@ -113,5 +113,11 @@ class ProgressTestCase(tf.test.TestCase):
 			expected = True
 			self.assertEqual(expectation,expected)
 
+	def testEmptyRandomActionSpaceSampleChoiceDefault(self):
+		with self.test_session():
+			expectation = random_action_space_sample_choice()
+			expected = -1
+			self.assertEqual(expectation,expected)
+
 if __name__ == '__main__':
 	tf.test.main()
