@@ -72,18 +72,18 @@ class StepsTestCase(tf.test.TestCase):
 class CollectiblesTestCase(tf.test.TestCase):
 	pass
 
-class ActionSpace(object):
+class ActionSpaceMock(object):
 	def sample(self):
 		return np.random.randint(5)
 
-class VirtualEnvironment(object):
+class VirtualEnvironmentMock(object):
 	def __init__(self):
-		self.action_space = ActionSpace()
+		self.action_space = ActionSpaceMock()
 
 class ProgressTestCase(tf.test.TestCase):
 	def testComposedSampleDefault(self):
 		with self.test_session():
-			expectation = len(composed_sample(vm=VirtualEnvironment())) == 2
+			expectation = len(composed_sample(vm=VirtualEnvironmentMock())) == 2
 			expected = True
 			self.assertEqual(expectation,expected)
 
@@ -95,7 +95,7 @@ class ProgressTestCase(tf.test.TestCase):
 
 	def testComposedSampleTypes(self):
 		with self.test_session():
-			expectation = composed_sample(vm=VirtualEnvironment())
+			expectation = composed_sample(vm=VirtualEnvironmentMock())
 			for expected in expectation:
 				match = type(expected)
 				expected_match = int
@@ -103,13 +103,13 @@ class ProgressTestCase(tf.test.TestCase):
 
 	def testRandomActionSpaceSampleChoiceDefault(self):
 		with self.test_session():
-			expectation = type(random_action_space_sample_choice(s=3,vm=VirtualEnvironment()))
+			expectation = type(random_action_space_sample_choice(s=3,vm=VirtualEnvironmentMock()))
 			expected = int
 			self.assertEqual(expectation,expected)
 
 	def testRandomActionSpaceSampleChoiceRangeReturnedValue(self):
 		with self.test_session():
-			expectation = random_action_space_sample_choice(s=4,vm=VirtualEnvironment()) >= 0
+			expectation = random_action_space_sample_choice(s=4,vm=VirtualEnvironmentMock()) >= 0
 			expected = True
 			self.assertEqual(expectation,expected)
 
