@@ -96,7 +96,7 @@ def main(argv):
 			for t in range(timesteps):
 				try:
 					env.render()
-					action = random_action_space_sample_choice(10, env)
+					action = random_action_space_sample_choice(i_episodes*2, env)
 					collect_stat(action,['input','actions'],stats)
 					observation, reward, done, info = env.step(action)
 					# collect_stat(observation,['observation'],stats)
