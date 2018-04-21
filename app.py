@@ -39,6 +39,21 @@ def check_output_env_label():
 def is_filled_latest_episode_with_iteration(i_episode_scoped, iteration_limit):
 	return i_episode_scoped == iteration_limit
 
+def collect_stat(v,props,stash):
+	if len(props) == 1:
+		curr = stash[props[0]]
+		curr.append(v)
+		return curr
+	elif len(props) == 2:
+		curr = stash[props[0]][props[1]]
+		curr.append(v)
+		return curr
+	elif len(props) == 3:
+		curr = stash[props[0]][props[1]][props[2]]
+		curr.append(v)
+		return curr
+	return []
+
 def composed_sample(s=2, vm=None):
 	if vm:
 		gen_sample = lambda: vm.action_space.sample()

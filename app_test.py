@@ -2,6 +2,7 @@ from app import tf
 from app import np
 
 from app import stats
+from app import collect_stat
 from app import composed_sample
 from app import random_action_space_sample_choice
 
@@ -70,7 +71,11 @@ class StepsTestCase(tf.test.TestCase):
 	pass
 
 class CollectiblesTestCase(tf.test.TestCase):
-	pass
+	def testStatsCollectInputActions(self):
+		with self.test_session():
+			expectation = collect_stat(10,['input','actions'],stats)
+			expected = [10]
+			self.assertEqual(expectation,expected)
 
 class ActionSpaceMock(object):
 	def sample(self):
