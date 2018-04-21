@@ -65,7 +65,6 @@ def main(argv):
 	if is_environments_list(args):
 		for environment in registry.all():
 			print(environment)
-		# sys.close()
 	elif is_environments_act(args):
 		env = gym.make(args.environment_name)
 		i_episodes = args.i_episodes
