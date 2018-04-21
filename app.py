@@ -110,7 +110,8 @@ def main(argv):
 						print('Episode finished after {} timesteps'.format(increased_timestep))
 						collect_stat(t,['output','timestep','iteration'],stats)
 						collect_stat(increased_timestep,['output','timestep','increased'],stats)
-						if is_latest_episode and args.output_stats_filename:
+						is_latest_episode_to_save_state = lambda args_cached: is_latest_episode and args_cached.output_stats_filename
+						if is_latest_episode_to_save_state(args):
 							filename = args.output_stats_filename
 							pre_df = {
 								# 'observations': stats['observations'],
@@ -126,7 +127,6 @@ def main(argv):
 							with open('data/{}-{}.csv'.format(stamp(),filename),'w') as f:
 								f.write(df.to_csv())
 								f.close()
-							print()
 							print('Statistics file saved ({}.csv)!'.format(filename))
 							del df
 							del filename
