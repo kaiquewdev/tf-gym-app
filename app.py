@@ -134,6 +134,11 @@ def main(argv):
 							del filename
 						print(check_output_env_label())
 						break
+						del is_latest_episode_to_save_state
+						del increased_timestep
+						del is_latest_episode
+						del episode_timesteps_iteration_limit
+						del max_episodes_range
 				except Exception as e:
 					print('Rendering execution ({})'.format(e))
 				finally:
