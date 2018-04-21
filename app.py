@@ -2,6 +2,7 @@ import gym
 import warnings
 import argparse
 import numpy as np
+import pandas as pd
 import tensorflow as tf
 
 from gym.envs import registry
@@ -13,12 +14,14 @@ parser.add_argument('--environments', default='act', type=str,
 	                                  help='Show a list of environments available')
 parser.add_argument('--environment_name', default='MsPacman-v0', type=str,
 	                                      help='The gym environment name')
+parser.add_argument('--output_stats_filename', type=str,
+	                                           help='Statistics about turn saved on a csv file')
 parser.add_argument('--i_episodes', default=10, type=int, help='episodes')
 parser.add_argument('--timesteps', default=1000, type=int, help='playable timesteps')
 
 stats = {'observations':[],'rewards':[],
          'output':{'done':[],'info':[],
-         'timestep':{'iteration':[],'increased':[]}},
+         		   'timestep':{'iteration':[],'increased':[]}},
          'input':{'actions':[]}}
 
 def increase_timestep(t=int):
@@ -84,19 +87,18 @@ def main(argv):
 		env = gym.make(args.environment_name)
 		i_episodes = args.i_episodes
 		timesteps = args.timesteps
-
 		for i_episode in range(i_episodes):
 			observation = env.reset()
 			for t in range(timesteps):
 				try:
 					env.render()
 					action = random_action_space_sample_choice(10, env)
-					stats['input']['actions'].append(action)
+					collect_stat(action,['input','actions'],stats)
 					observation, reward, done, info = env.step(action)
-					stats['observations'].append(observation)
-					stats['rewards'].append(reward)
-					stats['output']['done'].append(done)
-					stats['output']['info'].append(info)
+					collect_stat(observation,['observation'],stats)
+					collect_stat(reward,['rewards'],stats)
+					collect_stat(done,['output','done'],stats)
+					collect_stat(info,['output','info'],stats)
 					if done:
 						max_episodes_range = (i_episodes - 1)
 						episode_timesteps_iteration_limit = max_episodes_range - 1
@@ -104,12 +106,33 @@ def main(argv):
 						increased_timestep = increase_timestep(t)
 						print('i_episode {}'.format(i_episode))
 						print('Episode finished after {} timesteps'.format(increased_timestep))
-						stats['output']['timestep']['iteration'].append(t)
-						stats['output']['timestep']['increased'].append(increased_timestep)
+						collect_stat(t,['output','timestep','iteration'],stats)
+						collect_stat(increased_timestep,['output','timestep','increased'],stats)
+						if is_latest_episode and args.output_stats_filename:
+							filename = args.output_stats_filename
+							pre_df = {
+								'observations': stats['observations'],
+								'rewards': stats['rewards'],
+								'done-output': stats['output']['done'],
+								'info-output': stats['output']['info'],
+								# 'iteration-timestep': stats['output']['timestep']['iteration'],
+								# 'increased-timestep': stats['output']['timestep']['increased'],
+								# 'actions-input': stats['input']['actions']
+							}
+							df = pd.DataFrame(pre_df)
+							with open('{}.csv'.format(filename),'w') as f:
+								f.write(df.to_csv())
+								f.close()
+							print()
+							print('Statistics file saved ({}.csv)!'.format(filename))
+							del df
+							del filename
 						print(check_output_env_label())
 						break
-				except Exception:
-					print('Exception occured on the rendering execution')
+				except Exception as e:
+					print('Rendering execution ({})'.format(e))
+				finally:
+					print('Execution of timestep done')
 	else:
 		parser.print_help()
 
