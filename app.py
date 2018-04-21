@@ -1,6 +1,7 @@
 import gym
 import warnings
 import argparse
+import numpy as np
 import tensorflow as tf
 
 from gym.envs import registry
@@ -37,6 +38,12 @@ def check_output_env_label():
 
 def is_filled_latest_episode_with_iteration(i_episode_scoped, iteration_limit):
 	return i_episode_scoped == iteration_limit
+
+def composed_sample(s=2, vm=None):
+	if vm:
+		gen_sample = lambda: vm.action_space.sample()
+		return [gen_sample() for _ in range(s)]
+	return []
 
 def main(argv):
 	args = parser.parse_args(argv[1:])

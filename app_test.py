@@ -1,6 +1,8 @@
 from app import tf
+from app import np
 
 from app import stats
+from app import composed_sample
 
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 	def testObservationsProperty(self):
@@ -48,6 +50,8 @@ class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 	def testOutputTimestepIncreasedProperty(self):
 		with self.test_session():
 			expectation = ((('output' in stats) and 'timestep' in stats['output']) and 'increased' in stats['output']['timestep'])
+			expected = True
+			self.assertEqual(expectation, expected)
 
 class TimeStepsTestCase(tf.test.TestCase):
 	pass
@@ -67,8 +71,20 @@ class StepsTestCase(tf.test.TestCase):
 class CollectiblesTestCase(tf.test.TestCase):
 	pass
 
+class ActionSpace(object):
+	def sample(self):
+		return np.random.randint(5)
+
+class VirtualEnvironment(object):
+	def __init__(self):
+		self.action_space = ActionSpace()
+
 class ProgressTestCase(tf.test.TestCase):
-	pass
+	def testComposedSampleDefault(self):
+		with self.test_session():
+			expectation = len(composed_sample(vm=VirtualEnvironment())) == 2
+			expected = True
+			self.assertEqual(expectation,expected)
 
 if __name__ == '__main__':
 	tf.test.main()
