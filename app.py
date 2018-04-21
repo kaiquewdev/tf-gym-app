@@ -75,6 +75,10 @@ def random_action_space_sample_choice(s=2, vm=None):
 		return choices[choice_index]
 	return -1
 
+
+def trim_env_spec_name(k):
+	return k.split('(')[1][:-1]
+
 def main(argv):
 	args = parser.parse_args(argv[1:])
 

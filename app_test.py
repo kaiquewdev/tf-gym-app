@@ -4,6 +4,7 @@ from app import np
 from app import stats
 from app import collect_stat
 from app import composed_sample
+from app import trim_env_spec_name
 from app import random_action_space_sample_choice
 
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
@@ -59,7 +60,11 @@ class TimeStepsTestCase(tf.test.TestCase):
 	pass
 
 class EnvironmentLoggingTestCase(tf.test.TestCase):
-	pass
+	def testRegistryAllSpecNameTreated(self):
+		with self.test_session():
+			expectation = trim_env_spec_name('EnvSpec(MsPacman-v0)')
+			expected = 'MsPacman-v0'
+			self.assertEqual(expectation, expected)
 
 class IterationLoggingTestCase(tf.test.TestCase):
 	pass
