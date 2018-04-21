@@ -8,13 +8,16 @@ from gym.envs import registry
 warnings.simplefilter('ignore')
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--environments', default='act', type=str, help='Show a list of environments available')
-parser.add_argument('--environment_name', default='MsPacman-v0', type=str, help='The gym environment name')
+parser.add_argument('--environments', default='act', type=str,
+	                                  help='Show a list of environments available')
+parser.add_argument('--environment_name', default='MsPacman-v0', type=str,
+	                                      help='The gym environment name')
 parser.add_argument('--i_episodes', default=10, type=int, help='episodes')
 parser.add_argument('--timesteps', default=1000, type=int, help='playable timesteps')
 
 stats = {'observations':[],'rewards':[],
-         'output':{'done':[],'info':[],'timestep':{'iteration':[],'increased':[]}},
+         'output':{'done':[],'info':[],
+         'timestep':{'iteration':[],'increased':[]}},
          'input':{'actions':[]}}
 
 def increase_timestep(t=int):
