@@ -58,11 +58,15 @@ def random_action_space_sample_choice(s=2, vm=None):
 def main(argv):
 	args = parser.parse_args(argv[1:])
 
-	if args.environments == 'list':
+	is_environments_name = lambda name, args_scoped: args_scoped.environments == name
+	is_environments_list = lambda args_scoped: is_environments_name('list', args_scoped)
+	is_environments_act = lambda args_scoped: is_environments_name('act', args_scoped)
+
+	if is_environments_list(args):
 		for environment in registry.all():
 			print(environment)
 		# sys.close()
-	elif args.environments == 'act':
+	elif is_environments_act(args):
 		env = gym.make(args.environment_name)
 		i_episodes = args.i_episodes
 		timesteps = args.timesteps
