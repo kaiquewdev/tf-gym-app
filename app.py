@@ -88,7 +88,7 @@ def main(argv):
 
 	if is_environments_list(args):
 		all_registry = registry.all()
-		registry_envs_name = [env.__repr__().split('(')[1][:-1] for env in all_registry]
+		registry_envs_name = [trim_env_spec_name(env.__repr__()) for env in all_registry]
 		for environment in registry_envs_name:
 			print(environment)
 	elif is_environments_act(args):
