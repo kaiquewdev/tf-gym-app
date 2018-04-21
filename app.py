@@ -45,6 +45,14 @@ def composed_sample(s=2, vm=None):
 		return [gen_sample() for _ in range(s)]
 	return []
 
+def random_action_space_sample_choice(s=2, vm=None):
+	if vm:
+		choices = composed_sample(s,vm)
+		limited_index = len(choices) - 1
+		choice_index = np.random.randint(limited_index)
+		return choices[choice_index]
+	return -1
+
 def main(argv):
 	args = parser.parse_args(argv[1:])
 

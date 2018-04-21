@@ -3,6 +3,7 @@ from app import np
 
 from app import stats
 from app import composed_sample
+from app import random_action_space_sample_choice
 
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 	def testObservationsProperty(self):
@@ -83,6 +84,32 @@ class ProgressTestCase(tf.test.TestCase):
 	def testComposedSampleDefault(self):
 		with self.test_session():
 			expectation = len(composed_sample(vm=VirtualEnvironment())) == 2
+			expected = True
+			self.assertEqual(expectation,expected)
+
+	def testEmptyComposedSampleDefault(self):
+		with self.test_session():
+			expectation = composed_sample()
+			expected = []
+			self.assertEqual(expectation,expected)
+
+	def testComposedSampleTypes(self):
+		with self.test_session():
+			expectation = composed_sample(vm=VirtualEnvironment())
+			for expected in expectation:
+				match = type(expected)
+				expected_match = int
+				self.assertEqual(match,expected_match)
+
+	def testRandomActionSpaceSampleChoiceDefault(self):
+		with self.test_session():
+			expectation = type(random_action_space_sample_choice(s=3,vm=VirtualEnvironment()))
+			expected = int
+			self.assertEqual(expectation,expected)
+
+	def testRandomActionSpaceSampleChoiceRangeReturnedValue(self):
+		with self.test_session():
+			expectation = random_action_space_sample_choice(s=4,vm=VirtualEnvironment()) >= 0
 			expected = True
 			self.assertEqual(expectation,expected)
 
