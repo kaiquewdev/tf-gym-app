@@ -45,6 +45,10 @@ class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 			expected = True
 			self.assertEqual(expectation, expected)
 
+	def testOutputTimestepIncreasedProperty(self):
+		with self.test_session():
+			expectation = ((('output' in stats) and 'timestep' in stats['output']) and 'increased' in stats['output']['timestep'])
+
 class TimeStepsTestCase(tf.test.TestCase):
 	pass
 
