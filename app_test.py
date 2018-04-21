@@ -27,6 +27,24 @@ class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 			expected = True
 			self.assertEqual(expectation, expected)
 
+	def testOutputInfoProperty(self):
+		with self.test_session():
+			expectation = (('output' in stats) and 'info' in stats['output'])
+			expected = True
+			self.assertEqual(expectation, expected)
+
+	def testOutputTimestepProperties(self):
+		with self.test_session():
+			expectation = (('output' in stats) and 'timestep' in stats['output'])
+			expected = True
+			self.assertEqual(expectation, expected)
+
+	def testOutputTimestepIterationProperty(self):
+		with self.test_session():
+			expectation = ((('output' in stats) and 'timestep' in stats['output']) and 'iteration' in stats['output']['timestep'])
+			expected = True
+			self.assertEqual(expectation, expected)
+
 class TimeStepsTestCase(tf.test.TestCase):
 	pass
 
