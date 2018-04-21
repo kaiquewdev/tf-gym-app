@@ -83,7 +83,9 @@ def main(argv):
 	is_environments_act = lambda args_scoped: is_environments_name('act', args_scoped)
 
 	if is_environments_list(args):
-		for environment in registry.all():
+		all_registry = registry.all()
+		registry_envs_name = [env.__repr__().split('(')[1][:-1] for env in all_registry]
+		for environment in registry_envs_name:
 			print(environment)
 	elif is_environments_act(args):
 		env = gym.make(args.environment_name)
