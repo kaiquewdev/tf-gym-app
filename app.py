@@ -20,6 +20,8 @@ parser.add_argument('--output_stats_filename', type=str,
 	                                           help='Statistics about turn saved on a csv file')
 parser.add_argument('--i_episodes', default=10, type=int, help='episodes')
 parser.add_argument('--timesteps', default=1000, type=int, help='playable timesteps')
+parser.add_argument('--action_type', default='conditional', type=str,
+	                                 help='Kind of usage for action sample')
 
 stats = {'observations':[],'rewards':[],
          'output':{'done':[],'info':[],
@@ -100,7 +102,14 @@ def main(argv):
 			for t in range(timesteps):
 				try:
 					env.render()
-					action = random_action_space_sample_choice(i_episodes*2, env)
+					if args.action_type == 'alternate':
+						action_choice = i_episodes*2
+						action = random_action_space_sample_choice(action_choice, env)
+					elif args.action_type == 'specific':
+						action = env.action_space.sample()
+					elif args.action_type == 'conditional':
+						action_choice = i_episodes
+						action = random_action_space_sample_choice(action_choice, env)
 					collect_stat(action,['input','actions'],stats)
 					observation, reward, done, info = env.step(action)
 					# collect_stat(observation,['observation'],stats)
