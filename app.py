@@ -110,6 +110,8 @@ def main(argv):
 					elif args.action_type == 'conditional':
 						action_choice = i_episodes
 						action = random_action_space_sample_choice(action_choice, env)
+					elif args.action_type == 'numerical':
+						action = env.action_space.n
 					collect_stat(action,['input','actions'],stats)
 					observation, reward, done, info = env.step(action)
 					# collect_stat(observation,['observation'],stats)
