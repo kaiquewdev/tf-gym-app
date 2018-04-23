@@ -22,6 +22,7 @@ parser.add_argument('--i_episodes', default=10, type=int, help='episodes')
 parser.add_argument('--timesteps', default=1000, type=int, help='playable timesteps')
 parser.add_argument('--action_type', default='conditional', type=str,
 	                                 help='Kind of usage for action sample')
+parser.add_argument('--seed_factor', default=2048, type=int, help='seed factor')
 
 stats = {'observations':[],'rewards':[],
          'output':{'done':[],'info':[],
@@ -69,7 +70,8 @@ def composed_sample(s=2, vm=None):
 		return gen_list_based_sample(s)
 	return []
 
-def random_action_space_sample_choice(s=2, vm=None):
+def random_action_space_sample_choice(s=2, vm=None, factor=1024):
+	np.random.seed(factor)
 	if vm:
 		choices = composed_sample(s,vm)
 		limited_index = len(choices) - 1
@@ -97,6 +99,7 @@ def main(argv):
 		env = gym.make(args.environment_name)
 		i_episodes = args.i_episodes
 		timesteps = args.timesteps
+		factor = args.seed_factor
 		for i_episode in range(i_episodes):
 			observation = env.reset()
 			for t in range(timesteps):
@@ -104,12 +107,12 @@ def main(argv):
 					env.render()
 					if args.action_type == 'alternate':
 						action_choice = i_episodes*2
-						action = random_action_space_sample_choice(action_choice, env)
+						action = random_action_space_sample_choice(action_choice, env, factor)
 					elif args.action_type == 'specific':
 						action = env.action_space.sample()
 					elif args.action_type == 'conditional':
 						action_choice = i_episodes
-						action = random_action_space_sample_choice(action_choice, env)
+						action = random_action_space_sample_choice(action_choice, env, factor)
 					elif args.action_type == 'numerical':
 						action = env.action_space.n
 					collect_stat(action,['input','actions'],stats)
