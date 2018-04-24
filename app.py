@@ -84,10 +84,13 @@ def random_action_space_sample_choice(s=2, vm=None, factor=1024):
 def trim_env_spec_name(k):
 	return k.split('(')[1][:-1]
 
+def is_environments_name(name, args_scoped):
+	return args_scoped.environments == name
+
 def main(argv):
 	args = parser.parse_args(argv[1:])
 
-	is_environments_name = lambda name, args_scoped: args_scoped.environments == name
+	# is_environments_name = lambda name, args_scoped: args_scoped.environments == name
 	is_environments_list = lambda args_scoped: is_environments_name('list', args_scoped)
 	is_environments_act = lambda args_scoped: is_environments_name('act', args_scoped)
 
