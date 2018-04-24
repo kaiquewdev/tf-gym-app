@@ -87,6 +87,9 @@ def trim_env_spec_name(k):
 def is_environments_name(name, args_scoped):
 	return args_scoped.environments == name
 
+def is_environments_list(args_scoped):
+	return is_environments_name('list', args_scoped)
+
 def main(argv):
 	args = parser.parse_args(argv[1:])
 

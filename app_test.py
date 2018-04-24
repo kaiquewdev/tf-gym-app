@@ -6,6 +6,7 @@ from app import collect_stat
 from app import composed_sample
 from app import trim_env_spec_name
 from app import is_environments_name
+from app import is_environments_list
 from app import random_action_space_sample_choice
 
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
@@ -61,8 +62,8 @@ class TimeStepsTestCase(tf.test.TestCase):
 	pass
 
 class ArgumentsMock(object):
-	def __init__(self):
-		self.environments = 'sample-data'
+	def __init__(self, name='sample-data'):
+		self.environments = name
 
 class EnvironmentLoggingTestCase(tf.test.TestCase):
 	def testRegistryAllSpecNameTreated(self):
@@ -74,6 +75,12 @@ class EnvironmentLoggingTestCase(tf.test.TestCase):
 	def testIsEnvironmentsName(self):
 		with self.test_session():
 			expectation = is_environments_name('sample-data', ArgumentsMock())
+			expected = True
+			self.assertEqual(expectation, expected)
+
+	def testIsEnvironmentsList(self):
+		with self.test_session():
+			expectation = is_environments_list(ArgumentsMock('list'))
 			expected = True
 			self.assertEqual(expectation, expected)
 
