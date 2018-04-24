@@ -90,12 +90,15 @@ def is_environments_name(name, args_scoped):
 def is_environments_list(args_scoped):
 	return is_environments_name('list', args_scoped)
 
+def is_environments_act(args_scoped):
+	return is_environments_name('act', args_scoped)
+
 def main(argv):
 	args = parser.parse_args(argv[1:])
 
 	# is_environments_name = lambda name, args_scoped: args_scoped.environments == name
-	is_environments_list = lambda args_scoped: is_environments_name('list', args_scoped)
-	is_environments_act = lambda args_scoped: is_environments_name('act', args_scoped)
+	# is_environments_list = lambda args_scoped: is_environments_name('list', args_scoped)
+	# is_environments_act = lambda args_scoped: is_environments_name('act', args_scoped)
 
 	if is_environments_list(args):
 		all_registry = registry.all()
