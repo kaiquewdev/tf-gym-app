@@ -23,6 +23,7 @@ parser.add_argument('--timesteps', default=1000, type=int, help='playable timest
 parser.add_argument('--action_type', default='conditional', type=str,
 	                                 help='Kind of usage for action sample')
 parser.add_argument('--seed_factor', default=2048, type=int, help='seed factor')
+parser.add_argument('--render', default='present', type=str, help='rendering presence')
 
 stats = {'observations':[],'rewards':[],
          'output':{'done':[],'info':[],
@@ -104,7 +105,7 @@ def main(argv):
 			observation = env.reset()
 			for t in range(timesteps):
 				try:
-					env.render()
+					if args.render == 'present': env.render()
 					if args.action_type == 'alternate':
 						action_choice = i_episodes*2
 						action = random_action_space_sample_choice(action_choice, env, factor)
