@@ -168,7 +168,7 @@ def main(argv):
 			print(environment)
 	elif is_environments_act(args):
 		env = gym.make(args.environment_name)
-		if args.action_type == 'dqn':
+		if is_action_type('dqn', args):
 			state_size = env.observation_space.shape[0]
 			action_size = env.action_space.n
 			agent = DQNAgent(state_size, action_size)
@@ -179,7 +179,7 @@ def main(argv):
 		factor = args.seed_factor
 		for i_episode in range(i_episodes):
 			state = env.reset()
-			if args.action_type == 'dqn':
+			if is_action_type('dqn', args):
 				state = np.reshape(state, [1, state_size])
 			for t in range(timesteps):
 				try:
@@ -194,11 +194,11 @@ def main(argv):
 						action = random_action_space_sample_choice(action_choice, env, factor)
 					elif args.action_type == 'numerical':
 						action = env.action_space.n
-					elif args.action_type == 'dqn':
+					elif is_action_type('dqn', args):
 						action = agent.act(state)
 					collect_stat(action,['input','actions'],stats)
 					observation, reward, done, info = env.step(action)
-					if args.action_type == 'dqn':
+					if is_action_type('dqn', args):
 						reward = reward if not done else -10
 						observation = np.reshape(observation, [1, state_size])
 						agent.remember(state, action, reward, observation, done)
@@ -214,7 +214,7 @@ def main(argv):
 						increased_timestep = increase_timestep(t)
 						print('i_episode {}'.format(i_episode))
 						print('Episode finished after {} timesteps'.format(increased_timestep))
-						if args.action_type == 'dqn':
+						if is_action_type('dqn', args):
 							print('Episode: {}/{}, score: {}, e: {:.2}'
 								  .format(i_episode, i_episodes, t, agent.epsilon))
 						collect_stat(t,['output','timestep','iteration'],stats)
@@ -250,7 +250,7 @@ def main(argv):
 					print('Rendering execution ({})'.format(e))
 				finally:
 					print('Execution of timestep done')
-			if args.action_type == 'dqn' and (len(agent.memory) > batch_size):
+			if is_action_type('dqn', args) and (len(agent.memory) > batch_size):
 				agent.replay(batch_size)
 	else:
 		parser.print_help()
