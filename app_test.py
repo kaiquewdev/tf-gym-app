@@ -11,6 +11,15 @@ from app import is_environments_name
 from app import is_environments_list
 from app import random_action_space_sample_choice
 
+from app import DQNAgent
+
+class DQNAgentTestCase(tf.test.TestCase):
+	def testStateSize(self):
+		with self.test_session():
+			expectation = DQNAgent(10, 30)
+			expected = 10
+			self.assertEqual(expectation.state_size, 10)
+
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 	def testObservationsProperty(self):
 		with self.test_session():
