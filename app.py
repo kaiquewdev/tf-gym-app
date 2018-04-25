@@ -176,7 +176,8 @@ def main(argv):
 		factor = args.seed_factor
 		for i_episode in range(i_episodes):
 			state = env.reset()
-			state = np.reshape(state, [1, state_size])
+			if args.action_type == 'dqn':
+				state = np.reshape(state, [1, state_size])
 			for t in range(timesteps):
 				try:
 					if args.render == 'present': env.render()
