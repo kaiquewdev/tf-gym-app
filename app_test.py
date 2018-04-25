@@ -20,6 +20,12 @@ class DQNAgentTestCase(tf.test.TestCase):
 			expected = 10
 			self.assertEqual(expectation.state_size, 10)
 
+	def testActionSize(self):
+		with self.test_session():
+			expectation = DQNAgent(10, 30)
+			expected = 30
+			self.assertEqual(expectation.action_size, 30)
+
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 	def testObservationsProperty(self):
 		with self.test_session():
