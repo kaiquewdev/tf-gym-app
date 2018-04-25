@@ -4,6 +4,12 @@ import argparse
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import random
+
+from collections import deque
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.optimizers import Adam
 
 from gym.envs import registry
 
@@ -29,6 +35,59 @@ stats = {'observations':[],'rewards':[],
          'output':{'done':[],'info':[],
          		   'timestep':{'iteration':[],'increased':[]}},
          'input':{'actions':[]}}
+
+EPISODES = 1000
+
+
+class DQNAgent:
+    def __init__(self, state_size, action_size):
+        self.state_size = state_size
+        self.action_size = action_size
+        self.memory = deque(maxlen=2000)
+        self.gamma = 0.95    # discount rate
+        self.epsilon = 1.0  # exploration rate
+        self.epsilon_min = 0.01
+        self.epsilon_decay = 0.995
+        self.learning_rate = 0.001
+        self.model = self._build_model()
+
+    def _build_model(self):
+        # Neural Net for Deep-Q learning Model
+        model = Sequential()
+        model.add(Dense(24, input_dim=self.state_size, activation='relu'))
+        model.add(Dense(24, activation='relu'))
+        model.add(Dense(self.action_size, activation='linear'))
+        model.compile(loss='mse',
+                      optimizer=Adam(lr=self.learning_rate))
+        return model
+
+    def remember(self, state, action, reward, next_state, done):
+        self.memory.append((state, action, reward, next_state, done))
+
+    def act(self, state):
+        if np.random.rand() <= self.epsilon:
+            return random.randrange(self.action_size)
+        act_values = self.model.predict(state)
+        return np.argmax(act_values[0])  # returns action
+
+    def replay(self, batch_size):
+        minibatch = random.sample(self.memory, batch_size)
+        for state, action, reward, next_state, done in minibatch:
+            target = reward
+            if not done:
+                target = (reward + self.gamma *
+                          np.amax(self.model.predict(next_state)[0]))
+            target_f = self.model.predict(state)
+            target_f[0][action] = target
+            self.model.fit(state, target_f, epochs=1, verbose=0)
+        if self.epsilon > self.epsilon_min:
+            self.epsilon *= self.epsilon_decay
+
+    def load(self, name):
+        self.model.load_weights(name)
+
+    def save(self, name):
+        self.model.save_weights(name)
 
 def increase_timestep(t=int):
 	return t + 1
@@ -80,7 +139,6 @@ def random_action_space_sample_choice(s=2, vm=None, factor=1024):
 		return choices[choice_index]
 	return -1
 
-
 def trim_env_spec_name(k):
 	return k.split('(')[1][:-1]
 
@@ -107,11 +165,18 @@ def main(argv):
 			print(environment)
 	elif is_environments_act(args):
 		env = gym.make(args.environment_name)
+		if args.action_type == 'dqn':
+			state_size = env.observation_space.shape[0]
+			action_size = env.action_space.n
+			agent = DQNAgent(state_size, action_size)
+			done = False
+			batch_size = 32
 		i_episodes = args.i_episodes
 		timesteps = args.timesteps
 		factor = args.seed_factor
 		for i_episode in range(i_episodes):
-			observation = env.reset()
+			state = env.reset()
+			state = np.reshape(state, [1, state_size])
 			for t in range(timesteps):
 				try:
 					if args.render == 'present': env.render()
@@ -125,8 +190,15 @@ def main(argv):
 						action = random_action_space_sample_choice(action_choice, env, factor)
 					elif args.action_type == 'numerical':
 						action = env.action_space.n
+					elif args.action_type == 'dqn':
+						action = agent.act(state)
 					collect_stat(action,['input','actions'],stats)
 					observation, reward, done, info = env.step(action)
+					if args.action_type == 'dqn':
+						reward = reward if not done else -10
+						observation = np.reshape(observation, [1, state_size])
+						agent.remember(state, action, reward, observation, done)
+						state = observation
 					# collect_stat(observation,['observation'],stats)
 					collect_stat(reward,['rewards'],stats)
 					# collect_stat(done,['output','done'],stats)
@@ -138,6 +210,9 @@ def main(argv):
 						increased_timestep = increase_timestep(t)
 						print('i_episode {}'.format(i_episode))
 						print('Episode finished after {} timesteps'.format(increased_timestep))
+						if args.action_type == 'dqn':
+							print('Episode: {}/{}, score: {}, e: {:.2}'
+								  .format(i_episode, i_episodes, t, agent.epsilon))
 						collect_stat(t,['output','timestep','iteration'],stats)
 						collect_stat(increased_timestep,['output','timestep','increased'],stats)
 						is_latest_episode_to_save_state = lambda args_cached: is_latest_episode and args_cached.output_stats_filename
@@ -161,16 +236,18 @@ def main(argv):
 							del df
 							del filename
 						print(check_output_env_label())
-						break
 						del is_latest_episode_to_save_state
 						del increased_timestep
 						del is_latest_episode
 						del episode_timesteps_iteration_limit
 						del max_episodes_range
+						break
 				except Exception as e:
 					print('Rendering execution ({})'.format(e))
 				finally:
 					print('Execution of timestep done')
+			if args.action_type == 'dqn' and (len(agent.memory) > batch_size):
+				agent.replay(batch_size)
 	else:
 		parser.print_help()
 
