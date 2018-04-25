@@ -3,6 +3,7 @@ from app import np
 
 from app import stats
 from app import collect_stat
+from app import is_action_type
 from app import composed_sample
 from app import trim_env_spec_name
 from app import is_environments_act
@@ -65,6 +66,7 @@ class TimeStepsTestCase(tf.test.TestCase):
 class ArgumentsMock(object):
 	def __init__(self, name='sample-data'):
 		self.environments = name
+		self.action_type = name
 
 class EnvironmentLoggingTestCase(tf.test.TestCase):
 	def testRegistryAllSpecNameTreated(self):
@@ -152,6 +154,13 @@ class ProgressTestCase(tf.test.TestCase):
 		with self.test_session():
 			expectation = random_action_space_sample_choice()
 			expected = -1
+			self.assertEqual(expectation,expected)
+
+class ProgressTypeTestCase(tf.test.TestCase):
+	def testIsActionTypeDefault(self):
+		with self.test_session():
+			expectation = is_action_type('sample-data', ArgumentsMock())
+			expected = True
 			self.assertEqual(expectation,expected)
 
 if __name__ == '__main__':

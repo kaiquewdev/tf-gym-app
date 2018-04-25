@@ -142,6 +142,9 @@ def random_action_space_sample_choice(s=2, vm=None, factor=1024):
 def trim_env_spec_name(k):
 	return k.split('(')[1][:-1]
 
+def is_action_type(name, args_scoped):
+	return args_scoped.action_type == name
+
 def is_environments_name(name, args_scoped):
 	return args_scoped.environments == name
 
