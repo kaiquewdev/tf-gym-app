@@ -13,6 +13,8 @@ from app import random_action_space_sample_choice
 
 from app import DQNAgent
 
+from app import deque
+
 class DQNAgentTestCase(tf.test.TestCase):
 	def testStateSize(self):
 		with self.test_session():
@@ -25,6 +27,13 @@ class DQNAgentTestCase(tf.test.TestCase):
 			expectation = DQNAgent(10, 30)
 			expected = 30
 			self.assertEqual(expectation.action_size, 30)
+
+	def testMemory(self):
+		with self.test_session():
+			expectation = type(DQNAgent(10, 30).memory) == deque
+			expected = True
+			self.assertEqual(expectation,expected)
+
 
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 	def testObservationsProperty(self):
