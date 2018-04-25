@@ -34,6 +34,12 @@ class DQNAgentTestCase(tf.test.TestCase):
 			expected = True
 			self.assertEqual(expectation,expected)
 
+	def testGamma(self):
+		with self.test_session():
+			expectation = DQNAgent(10, 30).gamma
+			expected = 0.95
+			self.assertEqual(expectation,expected)
+
 
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 	def testObservationsProperty(self):
