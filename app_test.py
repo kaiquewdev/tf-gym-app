@@ -56,7 +56,7 @@ class DQNAgentTestCase(tf.test.TestCase):
 	def testEpsilonDecay(self):
 		with self.test_session():
 			expectation = DQNAgent(10, 30).epsilon_decay
-			expected = 0.995
+			expected = 0.99
 			self.assertEqual(expectation,expected)
 
 	def testLearningRate(self):
@@ -68,6 +68,12 @@ class DQNAgentTestCase(tf.test.TestCase):
 	def testModelType(self):
 		with self.test_session():
 			expectation = type(DQNAgent(10, 30).model)
+			expected = Sequential
+			self.assertEqual(expectation,expected)
+
+	def testTargetModelType(self):
+		with self.test_session():
+			expectation = type(DQNAgent(10, 30).target_model)
 			expected = Sequential
 			self.assertEqual(expectation,expected)
 
