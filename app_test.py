@@ -7,6 +7,7 @@ from app import is_action_type
 from app import composed_sample
 from app import trim_env_spec_name
 from app import is_environments_act
+from app import is_environments_gen
 from app import is_environments_name
 from app import is_environments_list
 from app import random_action_space_sample_choice
@@ -163,6 +164,12 @@ class EnvironmentLoggingTestCase(tf.test.TestCase):
 	def testIsEnvironmentsAct(self):
 		with self.test_session():
 			expectation = is_environments_act(ArgumentsMock('act'))
+			expected = True
+			self.assertEqual(expectation, expected)
+
+	def testIsEnvorinmentsGen(self):
+		with self.test_session():
+			expectation = is_environments_gen(ArgumentsMock('gen'))
 			expected = True
 			self.assertEqual(expectation, expected)
 

@@ -168,6 +168,9 @@ def is_environments_list(args_scoped):
 def is_environments_act(args_scoped):
 	return is_environments_name('act', args_scoped)
 
+def is_environments_gen(args_scoped):
+	return is_environments_name('gen', args_scoped)
+
 def main(argv):
 	args = parser.parse_args(argv[1:])
 
