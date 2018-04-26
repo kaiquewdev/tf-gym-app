@@ -38,7 +38,7 @@ stats = {'observations':[],'rewards':[],
          		   'timestep':{'iteration':[],'increased':[]}},
          'input':{'actions':[]}}
 
-EPISODES = 5000
+EPISODES = 10000
 
 
 class DQNAgent:
