@@ -1,0 +1,8 @@
+[metadata]
+description-file = README.md
+include LICENSE
+include REAMDE.md
+include CONTRIBUTING.md
+graft docs
+graft examples
+graft tests
