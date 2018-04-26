@@ -40,6 +40,12 @@ class DQNAgentTestCase(tf.test.TestCase):
 			expected = 0.95
 			self.assertEqual(expectation,expected)
 
+	def testEpsilon(self):
+		with self.test_session():
+			expectation = DQNAgent(10, 30).epsilon
+			expected = 1.0
+			self.assertEqual(expectation,expected)
+
 
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 	def testObservationsProperty(self):
