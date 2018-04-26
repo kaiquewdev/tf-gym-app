@@ -293,6 +293,9 @@ def main(argv):
 	else:
 		parser.print_help()
 
+def run_main():
+	tf.app.run(main)
+
 if __name__ == '__main__':
 	tf.logging.set_verbosity(tf.logging.INFO)
-	tf.app.run(main)
+	run_main()
