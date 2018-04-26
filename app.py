@@ -22,6 +22,8 @@ warnings.simplefilter('ignore')
 parser = argparse.ArgumentParser()
 parser.add_argument('--environments', default='act', type=str,
 	                                  help='Show a list of environments available')
+parser.add_argument('--env_name', default='pacman', type=str,
+								  help='Generated environment name')
 parser.add_argument('--environment_name', default='MsPacman-v0', type=str,
 	                                      help='The gym environment name')
 parser.add_argument('--output_stats_filename', type=str,
@@ -171,6 +173,19 @@ def is_environments_act(args_scoped):
 def is_environments_gen(args_scoped):
 	return is_environments_name('gen', args_scoped)
 
+file_content = '''
+import gym
+env = gym.make("%s")
+for i_episode in range(20):
+	for t in range(1000):
+		env.render()
+		action = env.action_space.sample()
+		observation, reward, done, info = env.step(action)
+		if done:
+			break
+env.close()
+'''
+
 def main(argv):
 	args = parser.parse_args(argv[1:])
 
@@ -178,7 +193,12 @@ def main(argv):
 	# is_environments_list = lambda args_scoped: is_environments_name('list', args_scoped)
 	# is_environments_act = lambda args_scoped: is_environments_name('act', args_scoped)
 
-	if is_environments_list(args):
+	if is_environments_gen(args):
+		with open('envs/{}gym-env.py'.format('-'.join([(args.env_name),''])), 'w') as f:
+			f.write(file_content % ((args.environment_name)))
+			f.close()
+			print('Gym environment file created!')
+	elif is_environments_list(args):
 		all_registry = registry.all()
 		registry_envs_name = [trim_env_spec_name(env.__repr__()) for env in all_registry]
 		for environment in registry_envs_name:
