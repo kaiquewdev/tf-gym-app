@@ -77,6 +77,12 @@ class DQNAgentTestCase(tf.test.TestCase):
 			expected = Sequential
 			self.assertEqual(expectation,expected)
 
+	def testUpdateTargetModel(self):
+		with self.test_session():
+			expectation = type(DQNAgent(10, 30).update_target_model())
+			expected = type(None)
+			self.assertEqual(expectation,expected)
+
 
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 	def testObservationsProperty(self):
