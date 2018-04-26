@@ -12,6 +12,7 @@ from app import is_environments_list
 from app import random_action_space_sample_choice
 
 from app import DQNAgent
+from app import Sequential
 
 from app import deque
 
@@ -56,6 +57,18 @@ class DQNAgentTestCase(tf.test.TestCase):
 		with self.test_session():
 			expectation = DQNAgent(10, 30).epsilon_decay
 			expected = 0.995
+			self.assertEqual(expectation,expected)
+
+	def testLearningRate(self):
+		with self.test_session():
+			expectation = DQNAgent(10, 30).learning_rate
+			expected = 0.001
+			self.assertEqual(expectation,expected)
+
+	def testModelType(self):
+		with self.test_session():
+			expectation = type(DQNAgent(10, 30).model)
+			expected = Sequential
 			self.assertEqual(expectation,expected)
 
 
