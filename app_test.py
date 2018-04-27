@@ -84,6 +84,12 @@ class DQNAgentTestCase(tf.test.TestCase):
 			expected = type(None)
 			self.assertEqual(expectation,expected)
 
+	def testRemember(self):
+		with self.test_session():
+			expectation = type(DQNAgent(10, 30).remember(1, 2, 3, 4, 5))
+			expected = type(None)
+			self.assertEqual(expectation,expected)
+
 
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 	def testObservationsProperty(self):
