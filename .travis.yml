@@ -3,6 +3,10 @@ python:
   - '3.6'
 install:
   - pip install tensorflow
+  - pip install keras
   - pip install gym
+  - pip install opencv-python
+  - pip install Pillow
+  - pip install nesgym_super_mario_bros
 script:
   - python app_test.py
