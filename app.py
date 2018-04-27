@@ -44,6 +44,7 @@ stats = {'observations':[],'rewards':[],
 class StatisticsOutput(object):
 	def __init__(self):
 		self.done = []
+		self.info = []
 
 class Statistics(object):
 	def __init__(self):
