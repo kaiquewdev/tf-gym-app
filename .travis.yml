@@ -3,6 +3,7 @@ python:
   - '3.6'
 install:
   - pip install tensorflow
+  - pip install pandas
   - pip install keras
   - pip install gym
   - pip install opencv-python
