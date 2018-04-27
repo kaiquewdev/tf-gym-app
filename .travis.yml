@@ -10,4 +10,4 @@ install:
   - pip install Pillow
   - pip install gym-super-mario-bros
 script:
-  - python app_test.py
+  - export CI='enabled' ; python app_test.py

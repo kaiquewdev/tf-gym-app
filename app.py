@@ -13,7 +13,10 @@ from dqn import deque
 from dqn import Sequential
 from dqn import DQNAgent
 
-import nesgym_super_mario_bros
+import os
+
+if os.environ['CI'] != 'enabled':
+	import nesgym_super_mario_bros
 
 warnings.simplefilter('ignore')
 
