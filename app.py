@@ -42,7 +42,8 @@ stats = {'observations':[],'rewards':[],
          'input':{'actions':[]}}
 
 class Statistics(object):
-	pass
+	def __init__(self):
+		self.observations = []
 
 def increase_timestep(t=int):
 	return t + 1
