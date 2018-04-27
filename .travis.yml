@@ -7,6 +7,6 @@ install:
   - pip install gym
   - pip install opencv-python
   - pip install Pillow
-  - pip install nesgym_super_mario_bros
+  - pip install gym-super-mario-bros
 script:
   - python app_test.py
