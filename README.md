@@ -1,5 +1,7 @@
 # Tf Gym App
 
+[![Build Status](https://travis-ci.com/kaiquewdev/tf-gym-app.svg?token=fP2MzeqGP5sWPBqwVGGZ&branch=master)](https://travis-ci.com/kaiquewdev/tf-gym-app)
+
 ## Description
 
 Small definition of a gym tensorflow app
