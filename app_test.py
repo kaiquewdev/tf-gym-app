@@ -17,6 +17,8 @@ from app import Sequential
 
 from app import deque
 
+from app import Statistics
+
 class DQNAgentTestCase(tf.test.TestCase):
 	def testStateSize(self):
 		with self.test_session():
@@ -138,6 +140,12 @@ class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 		with self.test_session():
 			expectation = ((('output' in stats) and 'timestep' in stats['output']) and 'increased' in stats['output']['timestep'])
 			expected = True
+			self.assertEqual(expectation, expected)
+
+	def testInstantiation(self):
+		with self.test_session():
+			expectation = type(Statistics())
+			expected = Statistics
 			self.assertEqual(expectation, expected)
 
 class TimeStepsTestCase(tf.test.TestCase):

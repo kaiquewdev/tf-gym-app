@@ -33,11 +33,16 @@ parser.add_argument('--action_type', default='conditional', type=str,
 parser.add_argument('--seed_factor', default=2048, type=int, help='seed factor')
 parser.add_argument('--render', default='present', type=str, help='rendering presence')
 parser.add_argument('--episodes', default=10000, type=int, help='DQN Agent Episodes')
+parser.add_argument('--pre_defined_state_size', default='gym', type=str,
+	                                            help='Observation shape based state size')
 
 stats = {'observations':[],'rewards':[],
          'output':{'done':[],'info':[],
          		   'timestep':{'iteration':[],'increased':[]}},
          'input':{'actions':[]}}
+
+class Statistics(object):
+	pass
 
 def increase_timestep(t=int):
 	return t + 1
@@ -144,9 +149,9 @@ def main(argv):
 	elif is_environments_act(args):
 		env = gym.make(args.environment_name)
 		if is_action_type('dqn', args):
-			if args.pre_defined_state_size:
+			if args.pre_defined_state_size == 'nesgym':
 				state_size = 172032
-			elif not args.pre_defined_state_size:
+			elif args.pre_defined_state_size == 'gym':
 				state_size = env.observation_space.shape[0]
 			action_size = env.action_space.n
 			agent = DQNAgent(state_size, action_size)
