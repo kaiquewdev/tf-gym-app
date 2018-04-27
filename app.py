@@ -41,6 +41,9 @@ stats = {'observations':[],'rewards':[],
          		   'timestep':{'iteration':[],'increased':[]}},
          'input':{'actions':[]}}
 
+class StatisticsOutputTimestep(object):
+	pass
+
 class StatisticsOutput(object):
 	def __init__(self):
 		self.done = []
@@ -161,6 +164,8 @@ def main(argv):
 				state_size = 172032
 			elif args.pre_defined_state_size == 'gym':
 				state_size = env.observation_space.shape[0]
+			elif args.pre_defined_state_size == 'gym-atari':
+				state_size = 100800
 			action_size = env.action_space.n
 			agent = DQNAgent(state_size, action_size)
 			done = False
