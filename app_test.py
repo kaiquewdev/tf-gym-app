@@ -154,6 +154,18 @@ class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 			expected = list
 			self.assertEqual(expectation, expected)
 
+	def testInstanceRewards(self):
+		with self.test_session():
+			expectation = type(Statistics().rewards)
+			expected = list
+			self.assertEqual(expectation, expected)
+
+	def testInstanceOutputDone(self):
+		with self.test_session():
+			expectation = type(Statistics().output.done)
+			expected = list
+			self.assertEqual(expectation, expected)
+
 class TimeStepsTestCase(tf.test.TestCase):
 	pass
 
