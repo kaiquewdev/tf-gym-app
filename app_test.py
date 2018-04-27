@@ -20,6 +20,7 @@ from app import deque
 from app import Statistics
 from app import StatisticsOutput
 from app import StatisticsOutputTimestep
+from app import StatisticsInput
 
 class DQNAgentTestCase(tf.test.TestCase):
 	def testStateSize(self):
@@ -196,6 +197,12 @@ class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 		with self.test_session():
 			expectation = type(Statistics().output.timestep.increased)
 			expected = list
+			self.assertEqual(expectation, expected)
+
+	def testInstanceInput(self):
+		with self.test_session():
+			expectation = type(StatisticsInput())
+			expected = StatisticsInput
 			self.assertEqual(expectation, expected)
 
 class TimeStepsTestCase(tf.test.TestCase):

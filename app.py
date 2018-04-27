@@ -15,7 +15,7 @@ from dqn import DQNAgent
 
 import os
 
-if os.environ['CI'] != 'enabled':
+if 'CI' in os.environ and os.environ['CI'] != 'enabled':
 	import nesgym_super_mario_bros
 
 warnings.simplefilter('ignore')
@@ -43,6 +43,9 @@ stats = {'observations':[],'rewards':[],
          'output':{'done':[],'info':[],
          		   'timestep':{'iteration':[],'increased':[]}},
          'input':{'actions':[]}}
+
+class StatisticsInput(object):
+	pass
 
 class StatisticsOutputTimestep(object):
 	def __init__(self):
