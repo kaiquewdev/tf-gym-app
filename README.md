@@ -11,17 +11,51 @@ Small definition of a gym tensorflow app
 Dependencies for that program work well
 
 ```
-pip install gym gym[atari] tensorflow
+pip install gym gym[atari] tensorflow keras gym-super-mario-bros
 ```
 
 or you can made an python environment with anaconda
 
 ```
-conda create -n tf python=3.6 gym gym[atari] tensorflow
+conda create -n tf python=3.6 gym gym[atari] tensorflow keras gym-super-mario-bros
 ```
 
 ## Basic usage with example for a pre-defined case or a suited one
 
 ```
 python app.py
+```
+
+or you can build a binary
+
+```
+bazel build :app
+```
+
+After that you can execute
+
+```
+./bazel-bin/app
+```
+
+### Properties available to activate as arguments
+
+
+
+## Thinking on relations like test
+
+```
+python app_test.py
+```
+
+or just doing the same to produce a binary in another way
+
+```
+bazel build :app_test
+```
+
+For tests too, you can have an access of that binary
+
+```
+./bazel-bin/app_test
 ```

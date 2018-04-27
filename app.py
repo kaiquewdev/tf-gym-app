@@ -175,6 +175,8 @@ def main(argv):
 				state_size = env.observation_space.shape[0]
 			elif args.pre_defined_state_size == 'gym-atari':
 				state_size = 100800
+			elif args.pre_defined_state_size == 'gym-atari-extend':
+				state_size = 120000
 			action_size = env.action_space.n
 			agent = DQNAgent(state_size, action_size)
 			done = False
