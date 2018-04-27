@@ -4,3 +4,8 @@ py_binary(
 		"app.py"
 	]
 )
+
+py_test(
+	name = "app_test",
+	srcs = ["app_test.py"]
+)
