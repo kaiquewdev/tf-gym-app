@@ -1,7 +1,7 @@
 
 import gym
 env = gym.make("SpaceInvaders-v0")
-for i_episode in range(20):
+for i_episode in range(10):
 	state = env.reset()
 	for t in range(1000):
 		env.render()

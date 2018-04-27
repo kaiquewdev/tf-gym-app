@@ -108,7 +108,7 @@ def is_environments_gen(args_scoped):
 file_content = '''
 import gym
 env = gym.make("%s")
-for i_episode in range(20):
+for i_episode in range(10):
 	state = env.reset()
 	for t in range(1000):
 		env.render()
@@ -119,6 +119,16 @@ for i_episode in range(20):
 env.close()
 '''
 
+def _write_env_file(args_scoped):
+	env_name = args_scoped.env_name
+	environment_name = args_scoped.environment_name
+	label = 'envs/{}gym-env.py'
+	label_format = '-'.join([(env_name),''])
+	with open(label.format(label_format), 'w') as f:
+		f.write(file_content % ((environment_name)))
+		f.close()
+		print('Gym environment file created!')
+
 def main(argv):
 	args = parser.parse_args(argv[1:])
 
@@ -127,10 +137,7 @@ def main(argv):
 	# is_environments_act = lambda args_scoped: is_environments_name('act', args_scoped)
 
 	if is_environments_gen(args):
-		with open('envs/{}gym-env.py'.format('-'.join([(args.env_name),''])), 'w') as f:
-			f.write(file_content % ((args.environment_name)))
-			f.close()
-			print('Gym environment file created!')
+		_write_env_file(args)
 	elif is_environments_list(args):
 		all_registry = registry.all()
 		registry_envs_name = [trim_env_spec_name(env.__repr__()) for env in all_registry]
