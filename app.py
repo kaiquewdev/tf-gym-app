@@ -42,12 +42,14 @@ stats = {'observations':[],'rewards':[],
          'input':{'actions':[]}}
 
 class StatisticsOutputTimestep(object):
-	pass
+	def __init__(self):
+		self.iteration = []
 
 class StatisticsOutput(object):
 	def __init__(self):
 		self.done = []
 		self.info = []
+		self.timestep = StatisticsOutputTimestep()
 
 class Statistics(object):
 	def __init__(self):
