@@ -13,6 +13,8 @@ from dqn import deque
 from dqn import Sequential
 from dqn import DQNAgent
 
+import nesgym_super_mario_bros
+
 warnings.simplefilter('ignore')
 
 parser = argparse.ArgumentParser()
@@ -132,10 +134,6 @@ def _write_env_file(args_scoped):
 def main(argv):
 	args = parser.parse_args(argv[1:])
 
-	# is_environments_name = lambda name, args_scoped: args_scoped.environments == name
-	# is_environments_list = lambda args_scoped: is_environments_name('list', args_scoped)
-	# is_environments_act = lambda args_scoped: is_environments_name('act', args_scoped)
-
 	if is_environments_gen(args):
 		_write_env_file(args)
 	elif is_environments_list(args):
@@ -146,7 +144,10 @@ def main(argv):
 	elif is_environments_act(args):
 		env = gym.make(args.environment_name)
 		if is_action_type('dqn', args):
-			state_size = env.observation_space.shape[0]
+			if args.pre_defined_state_size:
+				state_size = 172032
+			elif not args.pre_defined_state_size:
+				state_size = env.observation_space.shape[0]
 			action_size = env.action_space.n
 			agent = DQNAgent(state_size, action_size)
 			done = False
@@ -229,6 +230,7 @@ def main(argv):
 					print('Execution of timestep done')
 			if is_action_type('dqn', args) and (len(agent.memory) > batch_size):
 				agent.replay(batch_size)
+		env.close()
 	else:
 		parser.print_help()
 
