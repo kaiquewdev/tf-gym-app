@@ -43,6 +43,8 @@ parser.add_argument('--render', default='present', type=str, help='rendering pre
 parser.add_argument('--episodes', default=10000, type=int, help='DQN Agent Episodes')
 parser.add_argument('--pre_defined_state_size', default='gym', type=str,
 	                                            help='Observation shape based state size')
+parser.add_argument('--pull', type=str,
+							  help='Name of game to pull')
 
 stats = {'observations':[],'rewards':[],
          'output':{'done':[],'info':[],
@@ -136,6 +138,9 @@ def is_environments_act(args_scoped):
 
 def is_environments_gen(args_scoped):
 	return is_environments_name('gen', args_scoped)
+
+def is_environments_pull(args_scoped):
+	return is_environments_name('pull', args_scoped)
 
 file_content = '''
 import gym
