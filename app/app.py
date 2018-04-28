@@ -1,25 +1,18 @@
+import os
 import gym
+import random
 import warnings
 import argparse
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-
 from gym.envs import registry
-
 from datetime import datetime
-
-import random
 from collections import deque
-
-from keras.models import Sequential
+from keras import backend as K
 from keras.layers import Dense
 from keras.optimizers import Adam
-from keras import backend as K
-
-import os
-
-import gym_pull as pulling
+from keras.models import Sequential
 
 has_ci_on_environ = 'CI' in os.environ
 is_ci_enabled = has_ci_on_environ and os.environ['CI'] == 'enabled'
