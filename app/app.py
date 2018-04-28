@@ -43,11 +43,6 @@ parser.add_argument('--episodes', default=10000, type=int, help='DQN Agent Episo
 parser.add_argument('--pre_defined_state_size', default='gym', type=str,
 	                                            help='Observation shape based state size')
 
-stats = {'observations':[],'rewards':[],
-         'output':{'done':[],'info':[],
-         		   'timestep':{'iteration':[],'increased':[]}},
-         'input':{'actions':[]}}
-
 class DQNAgent:
     def __init__(self, state_size, action_size):
         self.state_size = state_size
@@ -129,7 +124,15 @@ class Statistics(object):
 	def __init__(self):
 		self.observations = []
 		self.rewards = []
+		self.input = StatisticsInput()
 		self.output = StatisticsOutput()
+
+statistics = Statistics()
+stats = {'observations':statistics.observations,'rewards':statistics.rewards,
+         'output':{'done':statistics.output.done,'info':statistics.output.info,
+         		   'timestep':{'iteration':statistics.output.timestep.iteration,
+         		   			   'increased':statistics.output.timestep.increased}},
+         'input':{'actions':statistics.input.actions}}
 
 def increase_timestep(t=int):
 	return t + 1
