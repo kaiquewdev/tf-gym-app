@@ -8,7 +8,7 @@ Small definition of a gym tensorflow app
 
 ## Installation
 
-Remote install
+Remote installation
 
 ```
 [sudo] [-H] pip install qlearning
