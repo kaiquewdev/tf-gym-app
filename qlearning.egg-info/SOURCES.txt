@@ -1,9 +1,0 @@
-MANIFEST.in
-README.md
-setup.cfg
-setup.py
-qlearning.egg-info/PKG-INFO
-qlearning.egg-info/SOURCES.txt
-qlearning.egg-info/dependency_links.txt
-qlearning.egg-info/requires.txt
-qlearning.egg-info/top_level.txt

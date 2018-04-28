@@ -9,6 +9,11 @@ setup(name='qlearning',
       url='git@github.com:kaiquewdev/tf-gym-app',
       download_url='https://github.com/kaiquewdev/tf-gym-app/tarball/1.0.0',
       license='BSD',
+      entry_points={
+            'console_scripts': [
+                  'qlearning=app.app:run_main'
+            ]
+      },
       install_requires=['numpy>=1.14.2',
                         'tensorflow>=1.7.0',
                         'Keras>=2.1.4',
@@ -17,14 +22,14 @@ setup(name='qlearning',
       extras_require={
       	'h5py': ['h5py']
       },
-	  classifiers=[
-	  	'Development Status :: 5 - Production/Stable',
-	  	'Intended Audience :: Developers',
-	  	'Intended Audience :: Education',
-	  	'Intended Audience :: Science/Research',
-	  	'License :: OSI Approved :: BSD License',
-	  	'Programming Language :: Python :: 3.6',
-	  	'Topic :: Software Development :: Libraries',
-	  	'Topic :: Software Development :: Libraries :: Python Modules'
-	  ],
-	  packages=find_packages())
+	classifiers=[
+      	'Development Status :: 5 - Production/Stable',
+        	'Intended Audience :: Developers',
+        	'Intended Audience :: Education',
+        	'Intended Audience :: Science/Research',
+        	'License :: OSI Approved :: BSD License',
+        	'Programming Language :: Python :: 3.6',
+        	'Topic :: Software Development :: Libraries',
+        	'Topic :: Software Development :: Libraries :: Python Modules'
+	],
+	packages=find_packages())
