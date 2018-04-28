@@ -6,6 +6,10 @@ app/__init__.py
 app/__main__.py
 app/app.py
 app/app_test.py
+app/bazel-app/__init__.py
+app/bazel-app/__main__.py
+app/bazel-app/app.py
+app/bazel-app/app_test.py
 qlearning.egg-info/PKG-INFO
 qlearning.egg-info/SOURCES.txt
 qlearning.egg-info/dependency_links.txt

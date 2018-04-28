@@ -2,7 +2,7 @@ Metadata-Version: 2.1
 Name: qlearning
 Version: 1.0.0
 Summary: Q-learning algorithms based on app structure
-Home-page: git@github.com:kaiquewdev/tf-gym-app
+Home-page: https://github.com/kaiquewdev/tf-gym-app
 Author: Kaique da Silva
 Author-email: kaique.silva.dev@gmail.com
 License: BSD

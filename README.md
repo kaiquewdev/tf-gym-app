@@ -8,6 +8,18 @@ Small definition of a gym tensorflow app
 
 ## Installation
 
+Remote install
+
+```
+[sudo] [-H] pip install qlearning
+```
+
+The primary can be dued like that
+
+```
+python setup.py install
+```
+
 Dependencies for that program work well
 
 ```
