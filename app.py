@@ -15,7 +15,12 @@ from dqn import DQNAgent
 
 import os
 
-if 'CI' in os.environ and os.environ['CI'] != 'enabled':
+has_ci_on_environ = 'CI' in os.environ
+is_ci_enabled = has_ci_on_environ and os.environ['CI'] == 'enabled'
+
+if not is_ci_enabled:
+	print('CI disabled')
+	import gym_gomoku
 	import nesgym_super_mario_bros
 
 warnings.simplefilter('ignore')
@@ -177,6 +182,8 @@ def main(argv):
 				state_size = 100800
 			elif args.pre_defined_state_size == 'gym-atari-extend':
 				state_size = 120000
+			elif args.pre_defined_state_size == 'gym-gomoku':
+				state_size = 361
 			action_size = env.action_space.n
 			agent = DQNAgent(state_size, action_size)
 			done = False
@@ -191,6 +198,7 @@ def main(argv):
 			for t in range(timesteps):
 				try:
 					if args.render == 'present': env.render()
+					if args.render == 'presented': env.render(args.render)
 					if args.action_type == 'alternate':
 						action_choice = i_episodes*2
 						action = random_action_space_sample_choice(action_choice, env, factor)

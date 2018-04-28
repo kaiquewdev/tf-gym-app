@@ -40,7 +40,11 @@ After that you can execute
 
 ### Properties available to activate as arguments
 
+First small example
 
+```
+python app.py --environment_name "Gomoku19x19-v0" --render "presented" --action_type "dqn" --pre_defined_state_size "gym-gomoku"
+```
 
 ## Thinking on relations like test
 
