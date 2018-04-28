@@ -11,7 +11,7 @@ setup(name='qlearning',
       license='BSD',
       entry_points={
             'console_scripts': [
-                  'qlearning=app:run_main'
+                  'qlearning=app.app:run_main'
             ]
       },
       install_requires=['numpy>=1.14.2',
