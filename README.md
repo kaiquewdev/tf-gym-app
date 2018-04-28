@@ -75,3 +75,6 @@ For tests too, you can have an access of that binary
 ```
 ./bazel-bin/app_test
 ```
+
+Credits to https://github.com/keon/deep-q-learning and the algorithm can suffer some
+modifications for a playable reproduction case.
