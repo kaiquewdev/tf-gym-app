@@ -7,5 +7,7 @@ py_binary(
 
 py_test(
 	name = "app_test",
-	srcs = ["app_test.py"]
+	srcs = [
+		"app_test.py"
+	]
 )
