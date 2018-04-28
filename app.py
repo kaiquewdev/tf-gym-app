@@ -15,6 +15,8 @@ from dqn import DQNAgent
 
 import os
 
+import gym_pull as pulling
+
 has_ci_on_environ = 'CI' in os.environ
 is_ci_enabled = has_ci_on_environ and os.environ['CI'] == 'enabled'
 
