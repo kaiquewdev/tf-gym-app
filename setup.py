@@ -18,7 +18,9 @@ setup(name='qlearning',
                         'tensorflow>=1.7.0',
                         'Keras>=2.1.4',
                         'pandas>=0.22.0',
-                        'gym>=0.10.5'],
+                        'gym>=0.10.5',
+                        'gym_gomoku>=0.0.1',
+                        'nesgym-super-mario-bros>=0.3.1'],
       extras_require={
       	'h5py': ['h5py']
       },
