@@ -254,7 +254,7 @@ def main(argv):
             action_size = env.action_space.n
             agent = DQNAgent(state_size, action_size)
             done = False
-            batch_size = 32
+            batch_size = 512
         i_episodes = args.i_episodes
         timesteps = args.timesteps
         factor = args.seed_factor

@@ -102,7 +102,6 @@ class DQNAgentTestCase(tf.test.TestCase):
 			expected = int
 			self.assertEqual(expectation,expected)
 
-
 class StatisticsStructAboutGameTestCase(tf.test.TestCase):
 	def testObservationsProperty(self):
 		with self.test_session():
