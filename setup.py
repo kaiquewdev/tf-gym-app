@@ -22,16 +22,13 @@ setup(name='qlearning',
                         'gym_gomoku>=0.0.1',
                         'nesgym-super-mario-bros>=0.3.1'],
       extras_require={
-      	'h5py': ['h5py']
+        'h5py': ['h5py']
       },
-	classifiers=[
-      	'Development Status :: 5 - Production/Stable',
-        	'Intended Audience :: Developers',
-        	'Intended Audience :: Education',
-        	'Intended Audience :: Science/Research',
-        	'License :: OSI Approved :: BSD License',
-        	'Programming Language :: Python :: 3.6',
-        	'Topic :: Software Development :: Libraries',
-        	'Topic :: Software Development :: Libraries :: Python Modules'
-	],
-	packages=find_packages())
+      classifiers=['Development Status :: 5 - Production/Stable',
+                   'Intended Audience :: Developers',
+                   'Intended Audience :: Education',
+                   'Intended Audience :: Science/Research',
+                   'License :: OSI Approved :: BSD License',
+                   'Programming Language :: Python :: 3.6',
+                   'Topic :: Software Development :: Libraries'],
+      packages=find_packages())

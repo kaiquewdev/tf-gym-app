@@ -18,6 +18,7 @@ has_ci_on_environ = 'CI' in os.environ
 is_ci_enabled = has_ci_on_environ and os.environ['CI'] == 'enabled'
 
 if not is_ci_enabled:
+    print('CI disabled')
     import gym_gomoku
     import nesgym_super_mario_bros
 
