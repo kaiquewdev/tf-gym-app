@@ -93,7 +93,7 @@ def main(argv):
 
     # After training is done, we save the final weights.
     w_format = './weights/{}_{}_{}_{}_{}'
-    dqn.save_weights(w_format.format('dqn', ENV_NAME
+    dqn.save_weights(w_format.format('dqn', ENV_NAME,
                                      NB_EPISODES, NB_STEPS,
                                      BATCH_SIZE), overwrite=True)
 
