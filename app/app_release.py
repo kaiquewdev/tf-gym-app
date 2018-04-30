@@ -3,10 +3,10 @@ import numpy as np
 import gym
 import argparse
 
-from tf.keras.models import Sequential
-from tf.keras.layers import Dense, Activation, Flatten
-from tf.keras.optimizers import Adam
-from tf.keras.callbacks import Tensorboard
+from keras.models import Sequential
+from keras.layers import Dense, Activation, Flatten
+from keras.optimizers import Adam
+from keras.callbacks import TensorBoard
 
 from rl.agents.dqn import DQNAgent
 from rl.policy import BoltzmannQPolicy
