@@ -10,22 +10,22 @@ from gym.envs import registry
 from datetime import datetime
 from collections import deque
 from keras import backend as K
-from keras.layers import Flatten
+# from keras.layers import Flatten
 from keras.layers import Dense
 from keras.optimizers import Adam
-from keras.optimizers import SGD
-from keras.optimizers import Adadelta
+# from keras.optimizers import SGD
+# from keras.optimizers import Adadelta
 from keras.models import Sequential
 from keras.callbacks import EarlyStopping
 from keras.callbacks import ReduceLROnPlateau
 
-from sklearn import model_selection
+# from sklearn import model_selection
 
-has_ci_on_environ = 'CI' in os.environ
-is_ci_enabled = has_ci_on_environ and os.environ['CI'] == 'enabled'
+# has_ci_on_environ = 'CI' in os.environ
+# is_ci_enabled = has_ci_on_environ and os.environ['CI'] == 'enabled'
 
-if not is_ci_enabled:
-    import gym_gomoku
+# if not is_ci_enabled:
+    # import gym_gomoku
     # import nesgym_super_mario_bros
 
 warnings.simplefilter('ignore')
@@ -39,8 +39,8 @@ parser.add_argument('--environment_name', default='MsPacman-v0', type=str,
                                           help='The gym environment name')
 parser.add_argument('--output_stats_filename', type=str,
                                                help='Statistics about turn saved on a csv file')
-parser.add_argument('--i_episodes', default=10, type=int, help='episodes')
-parser.add_argument('--timesteps', default=1000, type=int, help='playable timesteps')
+parser.add_argument('--i_episodes', default=40, type=int, help='episodes')
+# parser.add_argument('--timesteps', default=1000, type=int, help='playable timesteps')
 parser.add_argument('--action_type', default='conditional', type=str,
                                      help='Kind of usage for action sample')
 parser.add_argument('--seed_factor', default=2048, type=int, help='seed factor')
@@ -48,21 +48,22 @@ parser.add_argument('--render', default='present', type=str, help='rendering pre
 parser.add_argument('--episodes', default=10000, type=int, help='DQN Agent Episodes')
 parser.add_argument('--pre_defined_state_size', default='gym', type=str,
                                                 help='Observation shape based state size')
+parser.add_argument('--i_seasons', default=2, type=int, help='Season iterated by episodes played')
 parser.add_argument('--usage', type=str)
 
 class DQNAgent:
     def __init__(self, state_size, action_size, timesteps):
         self.state_size = state_size
         self.action_size = action_size
-        self.memory = deque(maxlen=5000)
-        self.gamma = 0.99035    # discount rate
-        self.epsilon = 1.0  # exploration rate
+        self.memory = deque(maxlen=1000000)
+        self.gamma = 0.9902    # discount rate
+        self.epsilon = 0.7  # exploration rate
         self.epsilon_min = 0.01
         self.epsilon_decay = 0.99
-        self.learning_rate = 0.001
+        self.learning_rate = 0.0001
         self.timesteps = timesteps
-        # self.learning_rate = 1e-3
-        self.epochs = 1
+        # self.learning_rate = 1e-4
+        self.epochs = 2
         self.model = self._build_model()
         self.target_model = self._build_model()
         self.update_target_model()
@@ -78,20 +79,20 @@ class DQNAgent:
     def _build_model(self):
         # Neural Net for Deep-Q learning Model
         model = Sequential()
-        model.add(Dense(16, input_dim=self.state_size))
-        model.add(Dense(32, activation='relu'))
-        model.add(Dense(32, activation='relu'))
+        model.add(Dense(8, input_dim=self.state_size))
         model.add(Dense(16, activation='relu'))
+        model.add(Dense(16, activation='relu'))
+        model.add(Dense(8, activation='relu'))
         model.add(Dense(self.timesteps))
-        model.add(Dense(self.action_size, activation='linear'))
+        model.add(Dense(self.action_size, activation='sigmoid'))
         model.compile(loss=self._huber_loss,
                       metrics=['accuracy'],
-                      optimizer=Adadelta(lr=self.learning_rate))
+                      optimizer=Adam(lr=self.learning_rate))
         return model
 
     def update_target_model(self):
         # copy weights from model to target_model
-        self.target_model.compile(optimizer='sgd', loss=self._mean_q)
+        self.target_model.compile(optimizer='adam', loss='mse')
         self.target_model.set_weights(self.model.get_weights())
 
     def remember(self, state, action, reward, next_state, done):
@@ -105,13 +106,13 @@ class DQNAgent:
         return np.argmax(act_values[0])  # returns action
 
     def replay(self, batch_size):
-        es = EarlyStopping(monitor='val_loss', min_delta=0, patience=0, verbose=0, mode='auto')
+        es = EarlyStopping(monitor='val_loss', min_delta=2, patience=5, verbose=0, mode='auto')
         rlrp = ReduceLROnPlateau(monitor='val_loss', factor=0.2,
                                  patience=5, min_lr=0.001)
         minibatch = random.sample(self.memory, batch_size)
         for state, action, reward, next_state, done in minibatch:
             target = self.model.predict(state)
-            reward = reward * .5
+            reward = reward
             if done:
                 target[0][action] = reward
             else:
@@ -267,113 +268,57 @@ def main(argv):
             print(environment)
     elif is_environments_act(args):
         env = gym.make(args.environment_name)
-        if is_action_type('dqn', args):
-            if args.pre_defined_state_size == 'nesgym':
-                pre_state_size = 172032
-            elif args.pre_defined_state_size == 'gym':
-                pre_state_size = env.observation_space.shape[0]
-            elif args.pre_defined_state_size == 'gym-atari':
-                pre_state_size = 100800
-            elif args.pre_defined_state_size == 'gym-atari-extend':
-                pre_state_size = 120000
-            elif args.pre_defined_state_size == 'gym-atari-small':
-                pre_state_size = 100800
-            elif args.pre_defined_state_size == 'gym-gomoku':
-                pre_state_size = 361
-            # state_size = (1,) + env.observation_space.shape
-            state_size = pre_state_size
+        # if is_action_type('dqn', args):
+        # if args.pre_defined_state_size == 'nesgym':
+        #     pre_state_size = 172032
+        # elif args.pre_defined_state_size == 'gym':
+        #     pre_state_size = env.observation_space.shape[0]
+        # elif args.pre_defined_state_size == 'gym-atari':
+        #     pre_state_size = 100800
+        # elif args.pre_defined_state_size == 'gym-atari-extend':
+        #     pre_state_size = 120000
+        # elif args.pre_defined_state_size == 'gym-atari-small':
+        #     pre_state_size = 100800
+        # elif args.pre_defined_state_size == 'gym-gomoku':
+        #     pre_state_size = 361
+        i_seasons = args.i_seasons
+        def season():
+            state_size = 100800
             action_size = env.action_space.n
-            agent = DQNAgent(state_size, action_size, args.timesteps)
-            try:
-                agent.load('./weights/dqn_{}_{}_{}.h5'.format(args.environment_name.lower(), args.timesteps,
-                                                      args.i_episodes))
-            except Exception:
-                pass
+            i_episodes = args.i_episodes
+            timesteps = int((i_episodes**3)/2)
+            agent = DQNAgent(state_size, action_size, timesteps)
+            # try:
+            #     agent.load('./weights/dqn_{}_{}_{}.h5'.format(args.environment_name.lower(), timesteps,
+            #                                                   i_episodes))
+            # except Exception:
+            #     pass
             done = False
-            batch_size = 64
-        i_episodes = args.i_episodes
-        timesteps = args.timesteps
-        factor = args.seed_factor
-        for i_episode in range(i_episodes):
-            state = env.reset()
-            if is_action_type('dqn', args):
-                state = np.reshape(state, [1, pre_state_size])
-            for t in range(timesteps):
-                try:
-                    if args.render == 'present': env.render()
-                    if args.render == 'presented': env.render(args.render)
-                    if args.action_type == 'alternate':
-                        action_choice = i_episodes*2
-                        action = random_action_space_sample_choice(action_choice, env, factor)
-                    elif args.action_type == 'specific':
-                        action = env.action_space.sample()
-                    elif args.action_type == 'conditional':
-                        action_choice = i_episodes
-                        action = random_action_space_sample_choice(action_choice, env, factor)
-                    elif args.action_type == 'numerical':
-                        action = env.action_space.n
-                    elif is_action_type('dqn', args) and len(state) == 5:
-                        action = agent.act(state)
-                    elif is_action_type('dqn', args) and len(state) != 5:
-                        action = env.action_space.sample()
-                    collect_stat(action,['input','actions'],stats)
+            batch_size = 32
+            # timesteps = args.timesteps
+            # factor = args.seed_factor
+            for i_episode in range(i_episodes):
+                print('Episodes: {}/{}'.format(i_episode + 1, i_episodes))
+                # state_size = (1,) + env.observation_space.shape
+                state = env.reset()
+                # if is_action_type('dqn', args):
+                state = np.reshape(state, [1, state_size])
+                for t in range(timesteps):
+                    env.render()
+                    action = agent.act(state)
                     observation, reward, done, info = env.step(action)
-                    if is_action_type('dqn', args):
-                        reward = reward if not done else -10
-                        observation = np.reshape(observation, [1, pre_state_size])
-                        agent.remember(state, action, reward, observation, done)
-                        state = observation
-                    # collect_stat(observation,['observation'],stats)
-                    collect_stat(reward,['rewards'],stats)
-                    # collect_stat(done,['output','done'],stats)
-                    # collect_stat(info,['output','info'],stats)
+                    reward = reward if not done else -10
+                    observation = np.reshape(observation, [1, state_size])
+                    agent.remember(state, action, reward, observation, done)
+                    state = observation
                     if done:
-                        max_episodes_range = (i_episodes - 1)
-                        episode_timesteps_iteration_limit = max_episodes_range - 1
-                        is_latest_episode = is_filled_latest_episode_with_iteration(i_episode, episode_timesteps_iteration_limit)
-                        increased_timestep = increase_timestep(t)
-                        print('i_episode {}'.format(i_episode))
-                        print('Episode finished after {} timesteps'.format(increased_timestep))
-                        if is_action_type('dqn', args):
-                            print('Episode: {}/{}, score: {}, e: {:.2}'
-                                  .format(i_episode, i_episodes, t, agent.epsilon))
-                        collect_stat(t,['output','timestep','iteration'],stats)
-                        collect_stat(increased_timestep,['output','timestep','increased'],stats)
-                        is_latest_episode_to_save_state = lambda args_cached: is_latest_episode and args_cached.output_stats_filename
-                        if is_latest_episode_to_save_state(args):
-                            filename = args.output_stats_filename
-                            pre_df = {
-                                # 'observations': stats['observations'],
-                                'rewards': stats['rewards'],
-                                # 'done-output': stats['output']['done'],
-                                # 'info-output': stats['output']['info'],
-                                # 'iteration-timestep': stats['output']['timestep']['iteration'],
-                                # 'increased-timestep': stats['output']['timestep']['increased'],
-                                'actions-input': stats['input']['actions']
-                            }
-                            df = pd.DataFrame(pre_df)
-                            stamp = lambda: '%s' % (int(datetime.now().timestamp()))
-                            with open('data/{}-{}.csv'.format(stamp(),filename),'w') as f:
-                                f.write(df.to_csv())
-                                f.close()
-                            print('Statistics file saved ({}.csv)!'.format(filename))
-                            del df
-                            del filename
-                        print(check_output_env_label())
-                        del is_latest_episode_to_save_state
-                        del increased_timestep
-                        del is_latest_episode
-                        del episode_timesteps_iteration_limit
-                        del max_episodes_range
                         break
-                except Exception as e:
-                    print('Rendering execution ({})'.format(e))
-                finally:
-                    print('Execution of timestep done')
-            if is_action_type('dqn', args) and (len(agent.memory) > batch_size):
                 agent.replay(batch_size)
-        agent.save('./weights/dqn_{}_{}_{}.h5'.format(args.environment_name.lower(), args.timesteps,
-                                              args.i_episodes))
+            agent.save('./weights/dqn_{}_{}_{}.h5'.format(args.environment_name.lower(), timesteps,
+                                                          i_episodes))
+        for i_season in range(i_seasons):
+            print('Seasons: {}/{}'.format(i_season + 1, i_seasons))
+            season()
         env.close()
     else:
         parser.print_help()
