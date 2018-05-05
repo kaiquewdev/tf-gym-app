@@ -1,9 +1,12 @@
+import random
 import numpy as np
 from collections import deque
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.optimizers import SGD
 from keras import backend as K
+from keras.callbacks import EarlyStopping
+from keras.callbacks import ReduceLROnPlateau
 
 class DQNAgent:
     def __init__(self, state_size, action_size):

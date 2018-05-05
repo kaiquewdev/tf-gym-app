@@ -8,8 +8,6 @@ import tensorflow as tf
 from gym.envs import registry
 from datetime import datetime
 from collections import deque
-from keras.callbacks import EarlyStopping
-from keras.callbacks import ReduceLROnPlateau
 
 # from sklearn import model_selection
 
