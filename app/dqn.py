@@ -1,14 +1,20 @@
+import numpy as np
+from collections import deque
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.optimizers import SGD
+from keras import backend as K
+
 class DQNAgent:
-    def __init__(self, state_size, action_size, timesteps):
+    def __init__(self, state_size, action_size):
         self.state_size = state_size
         self.action_size = action_size
         self.memory = deque(maxlen=5000)
-        self.gamma = 0.99035    # discount rate
+        self.gamma = 0.95    # discount rate
         self.epsilon = 1.0  # exploration rate
         self.epsilon_min = 0.01
         self.epsilon_decay = 0.99
         self.learning_rate = 0.001
-        self.timesteps = timesteps
         # self.learning_rate = 1e-3
         self.epochs = 1
         self.model = self._build_model()
@@ -30,7 +36,6 @@ class DQNAgent:
         model.add(Dense(32, activation='relu'))
         model.add(Dense(32, activation='relu'))
         model.add(Dense(16, activation='relu'))
-        model.add(Dense(self.timesteps))
         model.add(Dense(self.action_size, activation='linear'))
         model.compile(loss=self._huber_loss,
                       metrics=['accuracy'],

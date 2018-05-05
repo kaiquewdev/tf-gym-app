@@ -8,13 +8,6 @@ import tensorflow as tf
 from gym.envs import registry
 from datetime import datetime
 from collections import deque
-from keras import backend as K
-# from keras.layers import Flatten
-from keras.layers import Dense
-# from keras.optimizers import Adam
-from keras.optimizers import SGD
-# from keras.optimizers import Adadelta
-from keras.models import Sequential
 from keras.callbacks import EarlyStopping
 from keras.callbacks import ReduceLROnPlateau
 
@@ -29,10 +22,16 @@ from keras.callbacks import ReduceLROnPlateau
 
 from program import parser
 
+from dqn import deque
+from dqn import Sequential
+from dqn import Dense
+from dqn import SGD
+from dqn import K
+from dqn import np
 from dqn import DQNAgent
 
 from statistics_utilities import StatisticsInput
-from statistics_utilities import StatisticsOutputTimesteps
+from statistics_utilities import StatisticsOutputTimestep
 from statistics_utilities import StatisticsOutput
 from statistics_utilities import Statistics
 
