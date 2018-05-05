@@ -2,6 +2,7 @@ import tensorflow as tf
 import numpy as np
 import gym
 import argparse
+import os
 
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
@@ -31,8 +32,10 @@ parser.add_argument('--nb_steps', default=50000, type=int,
 #                                     help='Nested iteration process across the model fitting')
 parser.add_argument('--nb_episodes', default=10, type=int,
                                      help='Goal interchangeble process limit')
-# parser.add_argument('--log_dir', default='./dqn_logs', type=str,
-#                                  help='Logging directory output')
+parser.add_argument('--log_dir', default='./dqn_logs', type=str,
+                                 help='Logging directory output')
+parser.add_argument('--train', default='enabled', type=str,
+                               help='Capabilitie to train the model with algorithm')
 
 def main(argv):
     args = parser.parse_args(argv[1:])
@@ -46,22 +49,26 @@ def main(argv):
     # BATCH_SIZE = args.batch_size
     NB_EPISODES = args.nb_episodes
     # LOG_DIR = args.log_dir
+    TRAIN = args.train
+    LOG_DIR = args.log_dir
 
     TARGET_LEARNING_RATE = 1e-2
     OPTIMIZER_LEARNING_RATE = 1e-3
 
-    # tensorboard = TensorBoard(log_dir=LOG_DIR, histogram_freq=0,
-    #                           batch_size=BATCH_SIZE, write_graph=True,
-    #                           write_grads=False, write_images=False,
-    #                           embeddings_freq=0, embeddings_layer_names=None,
-    #                           embeddings_metadata=None)
+    BATCH_SIZE = 32
+
+    tensorboard = TensorBoard(log_dir=LOG_DIR, histogram_freq=0,
+                              batch_size=BATCH_SIZE, write_graph=True,
+                              write_grads=False, write_images=False,
+                              embeddings_freq=0, embeddings_layer_names=None,
+                              embeddings_metadata=None)
 
     # Get the environment and extract the number of actions.
     env = gym.make(ENV_NAME)
     np.random.seed(NP_RANDOM_SEED)
     env.seed(ENV_SEED)
     nb_actions = env.action_space.n
-    w_format = './weights/{}_{}_{}_{}'
+    w_format = './weights/{}_{}_{}_{}.h5'
 
     # Next, we build a very simple model.
     model = Sequential()
@@ -76,8 +83,21 @@ def main(argv):
     model.add(Activation('linear'))
     print(model.summary())
 
-    model.load_weights(w_format.format('dqn', ENV_NAME,
-                                       NB_EPISODES, NB_STEPS))
+    # def _has_weight_file():
+    #     os.chdir('./weights')
+    #     files = os.listdir()
+    #     os.chdir('../')
+    #     return len([fname for fname in files if fname.find(w_format.format('dqn', ENV_NAME,
+                                                                           # NB_EPISODES, NB_STEPS)) > -1]) > 0
+
+    # if _has_weight_file():
+    try:
+        model.load_weights(w_format.format('dqn', ENV_NAME,
+                                           NB_EPISODES, NB_STEPS))
+    except Exception as e:
+        pass
+    finally:
+        print('Model loaded finally')
 
     # Finally, we configure and compile our agent. You can use every built-in Keras optimizer and
     # even the metrics!
@@ -85,19 +105,21 @@ def main(argv):
     policy = BoltzmannQPolicy()
     dqn = DQNAgent(model=model, nb_actions=nb_actions,
                    memory=memory, nb_steps_warmup=WARMUP,
-                   target_model_update=TARGET_LEARNING_RATE, policy=policy)
+                   target_model_update=TARGET_LEARNING_RATE, policy=policy,
+                   enable_double_dqn=True, enable_dueling_network=False,
+                   dueling_type='avg')
 
     dqn.compile(Adam(lr=OPTIMIZER_LEARNING_RATE), metrics=['mae'])
 
-    # Okay, now it's time to learn something! We visualize the training here for show, but this
-    # slows down training quite a lot. You can always safely abort the training prematurely using
-    # Ctrl + C.
-    dqn.fit(env, nb_steps=NB_STEPS, 
-            visualize=True, verbose=2)
+    # # Okay, now it's time to learn something! We visualize the training here for show, but this
+    # # slows down training quite a lot. You can always safely abort the training prematurely using
+    # # Ctrl + C.
+    if TRAIN == 'enabled':
+        dqn.fit(env, nb_steps=NB_STEPS, 
+                visualize=True, verbose=1)
 
-    # After training is done, we save the final weights.
-    dqn.save_weights(w_format.format('dqn', ENV_NAME,
-                                     NB_EPISODES, NB_STEPS), overwrite=True)
+        dqn.save_weights(w_format.format('dqn', ENV_NAME,
+                                         NB_EPISODES, NB_STEPS), overwrite=True)
 
     # Finally, evaluate our algorithm for 5 episodes.
     dqn.test(env, nb_episodes=NB_EPISODES, visualize=True)
