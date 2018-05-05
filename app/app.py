@@ -204,8 +204,7 @@ def is_environments_gen(args_scoped):
 def is_environments_pull(args_scoped):
     return is_environments_name('pull', args_scoped)
 
-file_content = '''
-import gym
+file_content = '''import gym
 env = gym.make("%s")
 for i_episode in range(10):
     state = env.reset()
