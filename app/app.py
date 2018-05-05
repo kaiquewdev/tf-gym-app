@@ -2,7 +2,7 @@ import warnings; warnings.simplefilter('ignore')
 import os
 import gym
 import random
-import numpy as np
+# import numpy as np
 import pandas as pd
 import tensorflow as tf
 from gym.envs import registry
