@@ -1,8 +1,7 @@
+import warnings; warnings.simplefilter('ignore')
 import os
 import gym
 import random
-import warnings
-import argparse
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -10,45 +9,25 @@ from gym.envs import registry
 from datetime import datetime
 from collections import deque
 from keras import backend as K
-from keras.layers import Flatten
+# from keras.layers import Flatten
 from keras.layers import Dense
 from keras.optimizers import Adam
-from keras.optimizers import SGD
-from keras.optimizers import Adadelta
+# from keras.optimizers import SGD
+# from keras.optimizers import Adadelta
 from keras.models import Sequential
-from keras.callbacks import EarlyStopping
-from keras.callbacks import ReduceLROnPlateau
+# from keras.callbacks import EarlyStopping
+# from keras.callbacks import ReduceLROnPlateau
 
-from sklearn import model_selection
+# from sklearn import model_selection
 
-has_ci_on_environ = 'CI' in os.environ
-is_ci_enabled = has_ci_on_environ and os.environ['CI'] == 'enabled'
+# has_ci_on_environ = 'CI' in os.environ
+# is_ci_enabled = has_ci_on_environ and os.environ['CI'] == 'enabled'
 
-if not is_ci_enabled:
-    import gym_gomoku
-    # import nesgym_super_mario_bros
+# if not is_ci_enabled:
+#     import gym_gomoku
+#     # import nesgym_super_mario_bros
 
-warnings.simplefilter('ignore')
-
-parser = argparse.ArgumentParser()
-parser.add_argument('--environments', default='act', type=str,
-                                      help='Show a list of environments available')
-parser.add_argument('--env_name', default='pacman', type=str,
-                                  help='Generated environment name')
-parser.add_argument('--environment_name', default='MsPacman-v0', type=str,
-                                          help='The gym environment name')
-parser.add_argument('--output_stats_filename', type=str,
-                                               help='Statistics about turn saved on a csv file')
-parser.add_argument('--i_episodes', default=10, type=int, help='episodes')
-parser.add_argument('--timesteps', default=1000, type=int, help='playable timesteps')
-parser.add_argument('--action_type', default='conditional', type=str,
-                                     help='Kind of usage for action sample')
-parser.add_argument('--seed_factor', default=2048, type=int, help='seed factor')
-parser.add_argument('--render', default='present', type=str, help='rendering presence')
-parser.add_argument('--episodes', default=10000, type=int, help='DQN Agent Episodes')
-parser.add_argument('--pre_defined_state_size', default='gym', type=str,
-                                                help='Observation shape based state size')
-parser.add_argument('--usage', type=str)
+from program import parser
 
 class DQNAgent:
     def __init__(self, state_size, action_size, timesteps):
