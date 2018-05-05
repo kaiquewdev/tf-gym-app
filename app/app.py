@@ -167,7 +167,7 @@ def main(argv):
             # state_size = (1,) + env.observation_space.shape
             state_size = pre_state_size
             action_size = env.action_space.n
-            agent = DQNAgent(state_size, action_size, args.timesteps)
+            agent = DQNAgent(state_size, action_size)
             # try:
             #     agent.load('./weights/dqn_{}_{}_{}.h5'.format(args.environment_name.lower(), args.timesteps,
             #                                           args.i_episodes))
